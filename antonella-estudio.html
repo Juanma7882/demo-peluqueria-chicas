@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antonella Ibañez Estudio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pink: { 50:'#fef5f7',100:'#fdeef2',200:'#fcd5de',300:'#f9b0c1',400:'#f48da6',500:'#e8678a',600:'#d4456e',700:'#b8305a',800:'#9a2a4d',900:'#822745' },
+            rose: { 50:'#fff5f6',100:'#ffe8ec',200:'#ffd6dd',300:'#ffb3c1',400:'#ff8fa5',500:'#e86f8a',600:'#d15070',700:'#b33d5c',800:'#963450',900:'#7d2e46' },
+          },
+          fontFamily: {
+            display: ['Playfair Display','serif'],
+            body: ['Poppins','sans-serif'],
+            script: ['Dancing Script','cursive'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Poppins', sans-serif; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeOut { from { opacity:1; } to { opacity:0; } }
+    @keyframes pulse-soft { 0%,100% { transform:scale(1); } 50% { transform:scale(1.03); } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+    .animate-pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
+    .animate-fade-out { animation: fadeOut 0.5s ease-out forwards; }
+
+    .page { display: none; }
+    .page.active { display: flex; flex-direction: column; }
+
+    .service-card { transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .service-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212,69,110,0.12); }
+
+    .sidebar-item.active { background: linear-gradient(135deg, #fdeef2, #fcd5de); border-right: 3px solid #d15070; }
+    .sidebar-item.active span { color: #d15070; font-weight: 600; }
+    .sidebar-item.active svg { color: #d15070; }
+    .sidebar-item { transition: all 0.2s ease; }
+    .sidebar-item:hover { background: #fef5f7; }
+
+    .category-pill.active {
+      background: linear-gradient(135deg, #f48da6, #d15070);
+      color: white;
+      box-shadow: 0 4px 15px rgba(212,69,110,0.3);
+    }
+
+    .hero-gradient { background: linear-gradient(180deg, #fdeef2 0%, #fef5f7 40%, #fff 100%); }
+
+    .btn-reserve {
+      background: linear-gradient(135deg, #f48da6, #d15070);
+      transition: all 0.3s ease;
+    }
+    .btn-reserve:hover {
+      background: linear-gradient(135deg, #d15070, #b33d5c);
+      box-shadow: 0 6px 20px rgba(212,69,110,0.4);
+      transform: translateY(-1px);
+    }
+
+    .logo-circle {
+      background: linear-gradient(135deg, #fdeef2, #fcd5de);
+      border: 2px solid rgba(244,141,166,0.3);
+    }
+
+    .splash-bar {
+      background: linear-gradient(90deg, transparent, #f48da6, #d15070, #f48da6, transparent);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s ease-in-out infinite;
+    }
+
+    input:focus { outline: none; }
+
+    /* Desktop sidebar scrollbar */
+    .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+    .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+    .sidebar-scroll::-webkit-scrollbar-thumb { background: #fcd5de; border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-gray-50 overflow-hidden" style="height: 100dvh;">
+
+  <!-- ==================== SPLASH SCREEN ==================== -->
+  <div id="splash" class="fixed inset-0 z-50 flex flex-col items-center justify-center hero-gradient">
+    <div class="flex flex-col items-center animate-fade-in">
+      <div class="w-56 h-56 logo-circle rounded-full flex items-center justify-center mb-8 animate-pulse-soft">
+        <div class="text-center">
+          <span class="font-display text-3xl text-rose-700 block leading-tight font-bold">ANTONELLA</span>
+          <span class="font-display text-xl text-rose-500 block">IBAÑEZ</span>
+          <div class="w-12 h-[2px] bg-rose-400 mx-auto my-2"></div>
+          <span class="font-script text-sm text-rose-400 block tracking-wider">Estudio</span>
+        </div>
+      </div>
+      <p class="text-rose-400 text-sm mt-2 font-light tracking-[0.25em] uppercase">Belleza en cada detalle</p>
+      <div class="mt-8 w-48 h-1 rounded-full overflow-hidden bg-rose-100">
+        <div class="splash-bar h-full rounded-full"></div>
+      </div>
+      <p class="text-rose-300 text-xs mt-6 font-light">Tu estilo, tus uñas, tu esencia.</p>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN APP (Desktop Layout) ==================== -->
+  <div id="app" class="hidden h-full">
+    <div class="flex h-full">
+
+      <!-- SIDEBAR -->
+      <aside class="w-72 bg-white border-r border-rose-100/50 flex flex-col flex-shrink-0">
+        <!-- Logo -->
+        <div class="px-6 py-6 border-b border-rose-100/30">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 logo-circle rounded-full flex items-center justify-center flex-shrink-0">
+              <span class="font-display text-lg text-rose-700 font-bold">A</span>
+            </div>
+            <div>
+              <h1 class="font-display text-base text-gray-800 font-bold leading-tight">Antonella Ibañez</h1>
+              <p class="font-script text-rose-500 text-sm">Estudio</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nav Items -->
+        <nav class="flex-1 py-4 sidebar-scroll overflow-y-auto">
+          <button onclick="navigateTo('home')" class="sidebar-item active w-full flex items-center gap-3 px-6 py-3 text-left" data-page="home">
+            <svg class="w-5 h-5 text-rose-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+            <span class="text-sm text-rose-500 font-semibold">Inicio</span>
+          </button>
+          <button onclick="navigateTo('services')" class="sidebar-item w-full flex items-center gap-3 px-6 py-3 text-left" data-page="services">
+            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
+            <span class="text-sm text-gray-600">Servicios</span>
+          </button>
+          <button onclick="navigateTo('appointments')" class="sidebar-item w-full flex items-center gap-3 px-6 py-3 text-left" data-page="appointments">
+            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+            <span class="text-sm text-gray-600">Mis Citas</span>
+          </button>
+          <button onclick="navigateTo('contact')" class="sidebar-item w-full flex items-center gap-3 px-6 py-3 text-left" data-page="contact">
+            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+            <span class="text-sm text-gray-600">Contacto</span>
+          </button>
+          <button onclick="navigateTo('profile')" class="sidebar-item w-full flex items-center gap-3 px-6 py-3 text-left" data-page="profile">
+            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+            <span class="text-sm text-gray-600">Mi Perfil</span>
+          </button>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="px-6 py-4 border-t border-rose-100/30">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-pink-50 rounded-full flex items-center justify-center">
+              <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0"/></svg>
+            </div>
+            <div>
+              <p class="text-xs text-gray-700 font-medium">Invitada</p>
+              <p class="text-[10px] text-gray-400">Iniciar sesión</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="flex-1 overflow-hidden">
+
+        <!-- PAGE: HOME -->
+        <div id="page-home" class="page active h-full overflow-y-auto hide-scrollbar">
+          <!-- Top Bar -->
+          <div class="hero-gradient px-8 pt-8 pb-6">
+            <div class="max-w-5xl mx-auto">
+              <div class="flex items-center justify-between mb-6">
+                <div>
+                  <h2 class="text-2xl font-semibold text-gray-800">Bienvenida</h2>
+                  <p class="text-gray-400 text-sm mt-1">Tu espacio de belleza y bienestar</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <button class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm border border-rose-100/30 hover:bg-pink-50 transition">
+                    <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+                  </button>
+                  <a href="https://www.instagram.com/antonellaibanezestudio/" target="_blank" class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm border border-rose-100/30 hover:bg-pink-50 transition">
+                    <svg class="w-5 h-5 text-rose-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Banner -->
+              <div class="bg-white/80 rounded-2xl p-6 flex items-center gap-6 shadow-sm border border-rose-100/50 mb-8">
+                <div class="flex-1">
+                  <p class="text-gray-700 font-medium text-base leading-snug">Resalta tu belleza,</p>
+                  <p class="font-script text-rose-500 text-3xl mt-1">siéntete increíble</p>
+                  <p class="text-gray-400 text-sm mt-2">Softgel, kapping, semipermanente, perfilado, laminado, lifting y más.</p>
+                </div>
+                <div class="w-28 h-28 rounded-2xl bg-gradient-to-br from-rose-200 to-pink-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                  <svg class="w-14 h-14 text-white/70" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="px-8 pb-8">
+            <div class="max-w-5xl mx-auto">
+              <!-- Explore Grid -->
+              <h3 class="text-gray-700 font-semibold text-lg mb-5">Explora</h3>
+              <div class="grid grid-cols-6 gap-4 mb-8">
+                <button onclick="navigateTo('services')" class="flex flex-col items-center gap-2.5 bg-white rounded-2xl py-5 px-3 border border-rose-100/30 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                  <div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
+                  </div>
+                  <span class="text-xs text-gray-600 font-medium">Servicios</span>
+                </button>
+                <button onclick="navigateTo('services')" class="flex flex-col items-center gap-2.5 bg-white rounded-2xl py-5 px-3 border border-rose-100/30 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                  <div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/></svg>
+                  </div>
+                  <span class="text-xs text-gray-600 font-medium">Precios</span>
+                </button>
+                <button class="flex flex-col items-center gap-2.5 bg-white rounded-2xl py-5 px-3 border border-rose-100/30 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                  <div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
+                  </div>
+                  <span class="text-xs text-gray-600 font-medium">Promos</span>
+                </button>
+                <button onclick="navigateTo('appointments')" class="flex flex-col items-center gap-2.5 bg-white rounded-2xl py-5 px-3 border border-rose-100/30 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                  <div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                  </div>
+                  <span class="text-xs text-gray-600 font-medium">Reservas</span>
+                </button>
+                <button onclick="navigateTo('appointments')" class="flex flex-col items-center gap-2.5 bg-white rounded-2xl py-5 px-3 border border-rose-100/30 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                  <div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  </div>
+                  <span class="text-xs text-gray-600 font-medium">Mis citas</span>
+                </button>
+                <button onclick="navigateTo('contact')" class="flex flex-col items-center gap-2.5 bg-white rounded-2xl py-5 px-3 border border-rose-100/30 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                  <div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+                  </div>
+                  <span class="text-xs text-gray-600 font-medium">Contacto</span>
+                </button>
+              </div>
+
+              <!-- Popular Services -->
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-gray-700 font-semibold text-lg">Servicios populares</h3>
+                <button onclick="navigateTo('services')" class="text-rose-500 text-sm font-medium hover:underline">Ver todos →</button>
+              </div>
+              <div class="grid grid-cols-3 gap-4">
+                <div onclick="showServiceDetail('soft-gel')" class="service-card bg-white rounded-2xl p-5 border border-rose-100/30 cursor-pointer shadow-sm">
+                  <div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center mb-3">
+                    <span class="text-xl">💎</span>
+                  </div>
+                  <p class="text-gray-700 font-medium text-sm mb-1">Soft Gel Liso</p>
+                  <p class="text-gray-400 text-xs mb-3">Uñas resistentes y duraderas</p>
+                  <p class="text-rose-500 font-bold text-base">Desde $32.000</p>
+                </div>
+                <div onclick="showServiceDetail('manos-semi')" class="service-card bg-white rounded-2xl p-5 border border-rose-100/30 cursor-pointer shadow-sm">
+                  <div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center mb-3">
+                    <span class="text-xl">💅</span>
+                  </div>
+                  <p class="text-gray-700 font-medium text-sm mb-1">Semipermanente + Nail Art</p>
+                  <p class="text-gray-400 text-xs mb-3">Con diseños personalizados</p>
+                  <p class="text-rose-500 font-bold text-base">$38.000</p>
+                </div>
+                <div class="service-card bg-white rounded-2xl p-5 border border-rose-100/30 cursor-pointer shadow-sm">
+                  <div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center mb-3">
+                    <span class="text-xl">👁</span>
+                  </div>
+                  <p class="text-gray-700 font-medium text-sm mb-1">Lifting de Pestañas</p>
+                  <p class="text-gray-400 text-xs mb-3">+ tinte + botox</p>
+                  <p class="text-rose-500 font-bold text-base">$40.000</p>
+                </div>
+                <div class="service-card bg-white rounded-2xl p-5 border border-rose-100/30 cursor-pointer shadow-sm">
+                  <div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center mb-3">
+                    <span class="text-xl">🪶</span>
+                  </div>
+                  <p class="text-gray-700 font-medium text-sm mb-1">Laminado de Cejas</p>
+                  <p class="text-gray-400 text-xs mb-3">+ nutrición + perfilado</p>
+                  <p class="text-rose-500 font-bold text-base">$35.000</p>
+                </div>
+                <div class="service-card bg-white rounded-2xl p-5 border border-rose-100/30 cursor-pointer shadow-sm">
+                  <div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center mb-3">
+                    <span class="text-xl">✨</span>
+                  </div>
+                  <p class="text-gray-700 font-medium text-sm mb-1">Manos y Pies Semi</p>
+                  <p class="text-gray-400 text-xs mb-3">Belleza completa</p>
+                  <p class="text-rose-500 font-bold text-base">$49.000</p>
+                </div>
+                <div class="service-card bg-white rounded-2xl p-5 border border-rose-100/30 cursor-pointer shadow-sm">
+                  <div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center mb-3">
+                    <span class="text-xl">🔄</span>
+                  </div>
+                  <p class="text-gray-700 font-medium text-sm mb-1">Retiro Semipermanente</p>
+                  <p class="text-gray-400 text-xs mb-3">Retiro profesional</p>
+                  <p class="text-rose-500 font-bold text-base">$10.000</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: SERVICES -->
+        <div id="page-services" class="page h-full overflow-hidden">
+          <div class="h-full flex flex-col">
+            <div class="px-8 pt-8 pb-4">
+              <div class="max-w-5xl mx-auto">
+                <div class="flex items-center justify-between mb-2">
+                  <h1 class="font-display text-2xl text-gray-800 font-bold">Nuestros servicios</h1>
+                  <button class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm border border-rose-100/30">
+                    <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+                  </button>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">Lista de precios</p>
+                <!-- Category Pills -->
+                <div class="flex flex-wrap gap-2" id="category-pills"></div>
+              </div>
+            </div>
+            <div class="flex-1 overflow-y-auto hide-scrollbar px-8 pt-2 pb-8">
+              <div class="max-w-5xl mx-auto" id="services-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: SERVICE DETAIL -->
+        <div id="page-detail" class="page h-full overflow-y-auto hide-scrollbar">
+          <div class="max-w-3xl mx-auto px-8 pt-8 pb-8">
+            <button onclick="navigateTo('services')" class="flex items-center gap-2 text-rose-500 text-sm font-medium mb-6 hover:underline">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+              Volver a servicios
+            </button>
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-rose-100/30">
+              <div class="w-full h-72 bg-gradient-to-br from-rose-200 to-pink-100 flex items-center justify-center">
+                <svg class="w-24 h-24 text-white/50" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              </div>
+              <div class="p-8">
+                <p class="text-gray-400 text-xs uppercase tracking-wider mb-2" id="detail-category">Servicio</p>
+                <h1 class="font-display text-3xl text-gray-800 font-bold mb-2" id="detail-title"></h1>
+                <p class="text-rose-500 text-2xl font-bold mb-5" id="detail-price"></p>
+                <p class="text-gray-500 text-sm leading-relaxed mb-6" id="detail-description"></p>
+                <div class="grid grid-cols-2 gap-3 mb-8" id="detail-features"></div>
+                <button class="btn-reserve w-full text-white py-4 rounded-2xl text-sm font-semibold tracking-wide flex items-center justify-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                  Reservar ahora
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: APPOINTMENTS -->
+        <div id="page-appointments" class="page h-full overflow-y-auto hide-scrollbar">
+          <div class="px-8 pt-8">
+            <div class="max-w-5xl mx-auto">
+              <h1 class="font-display text-2xl text-gray-800 font-bold mb-2">Mis Citas</h1>
+              <p class="text-gray-400 text-sm mb-8">Gestiona tus reservas</p>
+            </div>
+          </div>
+          <div class="flex flex-col items-center justify-center mt-12">
+            <div class="w-28 h-28 bg-pink-50 rounded-full flex items-center justify-center mb-6">
+              <svg class="w-14 h-14 text-rose-300" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"/></svg>
+            </div>
+            <h3 class="text-gray-700 font-semibold text-xl mb-2">Sin citas próximas</h3>
+            <p class="text-gray-400 text-sm text-center mb-8 max-w-md">Reserva un servicio y tu próxima cita aparecerá aquí</p>
+            <button onclick="navigateTo('services')" class="btn-reserve text-white px-10 py-3.5 rounded-full text-sm font-medium">Reservar ahora</button>
+          </div>
+        </div>
+
+        <!-- PAGE: CONTACT -->
+        <div id="page-contact" class="page h-full overflow-y-auto hide-scrollbar">
+          <div class="px-8 pt-8 pb-8">
+            <div class="max-w-4xl mx-auto">
+              <h1 class="font-display text-2xl text-gray-800 font-bold mb-2">Contacto</h1>
+              <p class="text-gray-400 text-sm mb-8">Información del estudio</p>
+
+              <div class="grid grid-cols-2 gap-6">
+                <!-- Left: Info -->
+                <div>
+                  <div class="bg-white rounded-2xl p-6 border border-rose-100/30 shadow-sm mb-5">
+                    <div class="flex items-center gap-4 mb-4">
+                      <div class="w-16 h-16 logo-circle rounded-full flex items-center justify-center">
+                        <span class="font-display text-xl text-rose-700 font-bold">A</span>
+                      </div>
+                      <div>
+                        <h3 class="font-display text-gray-800 font-bold text-lg">Antonella Ibañez Estudio</h3>
+                        <div class="flex gap-0.5 mt-1">
+                          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        </div>
+                      </div>
+                    </div>
+                    <p class="text-gray-500 text-sm leading-relaxed">Salón dedicado a la belleza de manos y pies, cejas y pestañas. Todas las técnicas nuevas en un solo lugar. Micropigmentación de cejas, ojos y labios.</p>
+                  </div>
+                  <div class="bg-white rounded-2xl p-5 border border-rose-100/30 shadow-sm">
+                    <div class="flex items-center gap-3">
+                      <div class="w-11 h-11 bg-pink-50 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      </div>
+                      <div>
+                        <p class="text-gray-700 font-medium text-sm">Horario de atención</p>
+                        <p class="text-gray-400 text-xs">Lunes a Sábados de 9 a 18:30 hs.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Right: Contact options -->
+                <div class="space-y-4">
+                  <a href="#" class="flex items-center gap-4 bg-white rounded-2xl p-5 border border-rose-100/30 shadow-sm hover:shadow-md transition-all">
+                    <div class="w-11 h-11 bg-green-50 rounded-xl flex items-center justify-center">
+                      <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+                    </div>
+                    <div class="flex-1">
+                      <p class="text-gray-700 font-medium text-sm">WhatsApp</p>
+                      <p class="text-gray-400 text-xs">Enviar mensaje</p>
+                    </div>
+                    <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                  </a>
+                  <a href="#" class="flex items-center gap-4 bg-white rounded-2xl p-5 border border-rose-100/30 shadow-sm hover:shadow-md transition-all">
+                    <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center">
+                      <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+                    </div>
+                    <div class="flex-1">
+                      <p class="text-gray-700 font-medium text-sm">Llamar</p>
+                      <p class="text-gray-400 text-xs">Llamar al fijo</p>
+                    </div>
+                    <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                  </a>
+                  <a href="https://www.instagram.com/antonellaibanezestudio/" target="_blank" class="flex items-center gap-4 bg-white rounded-2xl p-5 border border-rose-100/30 shadow-sm hover:shadow-md transition-all">
+                    <div class="w-11 h-11 bg-purple-50 rounded-xl flex items-center justify-center">
+                      <svg class="w-5 h-5 text-purple-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </div>
+                    <div class="flex-1">
+                      <p class="text-gray-700 font-medium text-sm">Instagram</p>
+                      <p class="text-gray-400 text-xs">@antonellaibanezestudio</p>
+                    </div>
+                    <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                  </a>
+                  <a href="#" class="flex items-center gap-4 bg-white rounded-2xl p-5 border border-rose-100/30 shadow-sm hover:shadow-md transition-all">
+                    <div class="w-11 h-11 bg-rose-50 rounded-xl flex items-center justify-center">
+                      <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                    </div>
+                    <div class="flex-1">
+                      <p class="text-gray-700 font-medium text-sm">Ubicación</p>
+                      <p class="text-gray-400 text-xs">Gral. Juan Lavalle 1513, Florida, Vicente López</p>
+                    </div>
+                    <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: PROFILE -->
+        <div id="page-profile" class="page h-full overflow-y-auto hide-scrollbar">
+          <div class="px-8 pt-8 pb-8">
+            <div class="max-w-3xl mx-auto">
+              <h1 class="font-display text-2xl text-gray-800 font-bold mb-8">Mi Perfil</h1>
+              <div class="bg-white rounded-2xl p-8 border border-rose-100/30 shadow-sm text-center mb-6">
+                <div class="w-24 h-24 logo-circle rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg class="w-12 h-12 text-rose-400" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+                </div>
+                <h3 class="text-gray-700 font-semibold text-lg">Invitada</h3>
+                <p class="text-gray-400 text-sm mt-1">Inicia sesión para gestionar tus citas</p>
+              </div>
+              <div class="space-y-3">
+                <button class="w-full flex items-center gap-4 bg-white rounded-2xl p-5 border border-rose-100/30 shadow-sm text-left hover:shadow-md transition">
+                  <div class="w-11 h-11 bg-pink-50 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0"/></svg></div>
+                  <span class="text-gray-700 text-sm font-medium flex-1">Mis datos</span>
+                  <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                </button>
+                <button class="w-full flex items-center gap-4 bg-white rounded-2xl p-5 border border-rose-100/30 shadow-sm text-left hover:shadow-md transition">
+                  <div class="w-11 h-11 bg-pink-50 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></div>
+                  <span class="text-gray-700 text-sm font-medium flex-1">Favoritos</span>
+                  <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                </button>
+                <button class="w-full flex items-center gap-4 bg-white rounded-2xl p-5 border border-rose-100/30 shadow-sm text-left hover:shadow-md transition">
+                  <div class="w-11 h-11 bg-pink-50 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+                  <span class="text-gray-700 text-sm font-medium flex-1">Configuración</span>
+                  <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // ============ DATA ============
+    const services = {
+      "Belleza de Manos & Pies": [
+        { name: "Manos y pies esmalte común", price: "$40.000", desc: "Tratamiento completo de belleza para manos y pies con esmaltado tradicional." },
+        { name: "Manos y pies semi con retiro", price: "Desde $59.000", desc: "Servicio completo semipermanente con retiro incluido." },
+        { name: "Manos y pies semipermanente", price: "$49.000", desc: "Belleza completa con esmaltado semipermanente de larga duración." },
+        { name: "Pedicuría c/bisturí + belleza de manos", price: "$45.000", desc: "Pedicuría profesional con bisturí y belleza de manos con esmaltado tradicional." }
+      ],
+      "Cejas": [
+        { name: "Laminado de cejas + nutrición + perfilado", price: "$35.000", desc: "Tratamiento completo de cejas con laminado, nutrición y diseño profesional." },
+        { name: "Perfilado de cejas", price: "$15.000", desc: "Diseño y perfilado profesional de cejas." },
+        { name: "Perfilado + exfoliación + nutrición", price: "$20.000", desc: "Tratamiento completo con exfoliación y nutrición para cejas perfectas." },
+        { name: "Tintura de cejas", price: "$15.000", desc: "Coloración profesional de cejas." }
+      ],
+      "Extensión de Pestañas": [
+        { name: "Extensión de pestañas volumen", price: "$45.000", desc: "Extensiones de volumen para una mirada impactante." },
+        { name: "Service extensiones", price: "$35.000", desc: "Mantenimiento y relleno de extensiones de pestañas." }
+      ],
+      "Manicuría y Pedicuría": [
+        { name: "Pedicuría + manos semipermanente", price: "$55.000", desc: "Combo completo de pedicuría con bisturí y manos semipermanente." }
+      ],
+      "Manos": [
+        { name: "Esmaltado semipermanente con nail art", price: "$38.000", desc: "Esmaltado semipermanente con diseños personalizados incluidos." },
+        { name: "Kapping con retiro", price: "$38.000", desc: "Kapping gel con servicio de retiro incluido." },
+        { name: "Kapping gel", price: "$26.000", desc: "Fortalecimiento con kapping de gel de alta duración." },
+        { name: "Manicuría tradicional + esmaltado común", price: "$19.000", desc: "Manicuría clásica con esmaltado tradicional." },
+        { name: "Manos con esmaltado semipermanente", price: "$23.000", desc: "Esmaltado semipermanente para manos, duración de 2-3 semanas." },
+        { name: "Manos semipermanente con retiro", price: "Desde $33.000", desc: "Esmaltado semipermanente con retiro del anterior incluido." }
+      ],
+      "Pestañas": [
+        { name: "Extensión de pestañas pelo x pelo", price: "$40.000", desc: "Extensiones naturales pelo por pelo para un look natural." },
+        { name: "Lifting de pestañas + tinte + botox", price: "$40.000", desc: "Tratamiento completo de lifting con tinte y nutrición botox." }
+      ],
+      "Pies": [
+        { name: "Belleza de pies con semipermanente", price: "$26.000", desc: "Tratamiento de belleza para pies con esmaltado semipermanente." },
+        { name: "Belleza de pies esmalte común", price: "$21.000", desc: "Belleza de pies con esmaltado tradicional." },
+        { name: "Pedicuría c/bisturí + semipermanente", price: "$32.000", desc: "Pedicuría profesional con torno y esmaltado semipermanente." },
+        { name: "Pedicuría tradicional completa", price: "$26.000", desc: "Pedicuría con bisturí, torno, belleza y esmaltado incluidos." }
+      ],
+      "Retiros": [
+        { name: "Retiro de esculpidas gel/acrílico/poligel", price: "$12.000", desc: "Retiro profesional de uñas esculpidas en cualquier material." },
+        { name: "Retiro de extensiones + nutrición", price: "Desde $10.000", desc: "Retiro de extensiones con tratamiento de nutrición." },
+        { name: "Retiro de Kapping", price: "$12.000", desc: "Retiro profesional de kapping gel." },
+        { name: "Retiro semipermanente", price: "$10.000", desc: "Retiro de esmaltado semipermanente." }
+      ],
+      "Soft Gel": [
+        { name: "Soft gel liso", price: "Desde $32.000", desc: "Uñas soft gel lisas, resistentes y de aspecto natural." },
+        { name: "Softgel con diseño", price: "Desde $47.000", desc: "Soft gel con diseños personalizados a elección." },
+        { name: "Softgel con retiro", price: "$44.000", desc: "Soft gel con retiro del trabajo anterior incluido." },
+        { name: "Softgel french", price: "$40.000", desc: "Diseño french clásico o moderno en soft gel." },
+        { name: "Uñas jacquie", price: "Desde $43.000", desc: "Diseño exclusivo jacquie en soft gel." }
+      ]
+    };
+
+    const categoryIcons = {
+      "Belleza de Manos & Pies":"✨","Cejas":"🪶","Extensión de Pestañas":"👁","Manicuría y Pedicuría":"💅",
+      "Manos":"🤚","Pestañas":"👀","Pies":"🦶","Retiros":"🔄","Soft Gel":"💎"
+    };
+
+    // ============ SPLASH (auto-dismiss) ============
+    setTimeout(() => {
+      const splash = document.getElementById('splash');
+      splash.classList.add('animate-fade-out');
+      setTimeout(() => {
+        splash.style.display = 'none';
+        document.getElementById('app').classList.remove('hidden');
+        document.getElementById('app').style.display = 'flex';
+      }, 500);
+    }, 2500);
+
+    // ============ NAVIGATION ============
+    let currentPage = 'home';
+    let currentCategory = Object.keys(services)[0];
+
+    function navigateTo(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + page).classList.add('active');
+      currentPage = page;
+
+      // Update sidebar
+      document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.classList.remove('active');
+        const svg = item.querySelector('svg');
+        const span = item.querySelector('span');
+        if (svg) { svg.classList.remove('text-rose-500'); svg.classList.add('text-gray-400'); }
+        if (span) { span.classList.remove('text-rose-500','font-semibold'); span.classList.add('text-gray-600'); }
+      });
+      const activeItem = document.querySelector(`.sidebar-item[data-page="${page}"]`);
+      if (activeItem) {
+        activeItem.classList.add('active');
+        const svg = activeItem.querySelector('svg');
+        const span = activeItem.querySelector('span');
+        if (svg) { svg.classList.remove('text-gray-400'); svg.classList.add('text-rose-500'); }
+        if (span) { span.classList.remove('text-gray-600'); span.classList.add('text-rose-500','font-semibold'); }
+      }
+
+      if (page === 'services') renderServices();
+    }
+
+    // ============ SERVICES ============
+    function renderCategoryPills() {
+      const container = document.getElementById('category-pills');
+      container.innerHTML = Object.keys(services).map(cat => `
+        <button onclick="selectCategory('${cat}')"
+          class="category-pill whitespace-nowrap px-4 py-2 rounded-full text-xs font-medium border transition-all
+            ${cat === currentCategory ? 'active' : 'bg-white text-gray-600 border-rose-100/50 hover:bg-pink-50'}">
+          ${categoryIcons[cat]||'✨'} ${cat}
+        </button>
+      `).join('');
+    }
+
+    function selectCategory(cat) { currentCategory = cat; renderServices(); }
+
+    function renderServices() {
+      renderCategoryPills();
+      const container = document.getElementById('services-list');
+      const items = services[currentCategory] || [];
+      container.innerHTML = `
+        <div class="grid grid-cols-2 gap-4 pb-8">
+          ${items.map((s,i) => `
+            <div onclick="showDetail('${currentCategory}',${i})"
+              class="service-card bg-white rounded-2xl p-5 border border-rose-100/30 cursor-pointer shadow-sm animate-fade-in"
+              style="animation-delay:${i*0.05}s;opacity:0;">
+              <div class="w-10 h-10 bg-pink-50 rounded-xl flex items-center justify-center mb-3">
+                <span class="text-lg">${categoryIcons[currentCategory]||'✨'}</span>
+              </div>
+              <p class="text-gray-700 font-medium text-sm mb-1">${s.name}</p>
+              <p class="text-gray-400 text-xs mb-3 line-clamp-2">${s.desc}</p>
+              <div class="flex items-center justify-between">
+                <span class="text-rose-500 font-bold text-sm">${s.price}</span>
+                <svg class="w-4 h-4 text-rose-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function showDetail(category, index) {
+      const service = services[category][index];
+      document.getElementById('detail-category').textContent = category;
+      document.getElementById('detail-title').textContent = service.name;
+      document.getElementById('detail-price').textContent = service.price;
+      document.getElementById('detail-description').textContent = service.desc;
+      const features = ["Productos de alta calidad","Diseños personalizados","Durabilidad garantizada","Atención profesional"];
+      document.getElementById('detail-features').innerHTML = features.map(f => `
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-rose-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+          <span class="text-gray-600 text-sm">${f}</span>
+        </div>
+      `).join('');
+      navigateTo('detail');
+    }
+
+    function showServiceDetail(type) {
+      if (type === 'soft-gel') showDetail('Soft Gel', 0);
+      else if (type === 'manos-semi') showDetail('Manos', 0);
+    }
+
+    renderCategoryPills();
+  </script>
+</body>
+</html>
